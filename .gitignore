@@ -1,0 +1,18 @@
+venv/
+include/
+
+# --- Caché de Python ---
+__pycache__/
+*.pyc
+.pytest_cache/
+.coverage
+
+# --- Reportes de Allure y Cucumber ---
+allure-results/
+reports/
+*.json
+
+# --- IDEs y Sistema Operativo ---
+.vscode/
+.idea/
+.DS_Store
