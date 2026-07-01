@@ -28,6 +28,7 @@ class WordCounterPage:
         editor.send_keys(Keys.CONTROL, "a")
         editor.send_keys(Keys.BACKSPACE)
         editor.send_keys(text)
+        editor.send_keys(Keys.ENTER)
         editor.send_keys(Keys.SHIFT)
 
     def get_word_count(self):

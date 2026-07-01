@@ -6,6 +6,7 @@ from selenium.webdriver.common.by import By
 import time
 from locators.word_counter_locators import WordCounterLocators
 
+
 @given("que el usuario abre la pagina de WordCounter")
 def open_word_counter_page(context):
     context.word_counter_page.open()
@@ -49,3 +50,4 @@ def validate_character_number(context, expected_count):
 @then('se valida que la palabra más se repite sea "{palabra_esperada}"')
 def step_validate_most_repeated_word(context, palabra_esperada):
     context.word_counter_page.validate_most_repeated_word(palabra_esperada)
+  
