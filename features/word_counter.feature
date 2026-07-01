@@ -32,7 +32,7 @@ Característica: Word Counter
   Escenario: Validar conteo de caracteres con palabra
     Dado que el usuario abre la pagina de WordCounter
     Cuando el usuario ingresa el texto "Hol@ Jose"
-    Entonces la aplicacion debe mostrar 10 caracteres
+    Entonces la aplicacion debe mostrar 9 caracteres
 
 
   Escenario: Validación de conteo con espacios múltiples y saltos de línea
@@ -44,7 +44,7 @@ Característica: Word Counter
       selenium
       """
     Entonces el número de palabras debe ser 3
-    Y la aplicacion debe mostrar 35 caracteres
+    Y la aplicacion debe mostrar 23 caracteres
 
   
   
@@ -57,7 +57,7 @@ Característica: Word Counter
       """
     Entonces las palabras más repetidas deben ser
       | palabra      | repeticiones |
-      | lumu         | 5            |
+      | lumu         | 6            |
       | ilumina      | 3            |
       | ataques      | 2            |
 
