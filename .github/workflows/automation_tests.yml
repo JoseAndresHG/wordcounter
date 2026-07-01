@@ -2,7 +2,7 @@ name: QA Automation Suite
 
 on:
   push:
-    branches: [ "main", "feature/wordcounter-tests",]
+    branches: [ "main", "feature/wordcounter-tests" ]
   pull_request:
     branches: [ "main", "feature/wordcounter-tests" ]
   workflow_dispatch: 
@@ -47,10 +47,19 @@ jobs:
         allure_history: allure-history
         keep_reports: 20
 
-    # 3. Publica el reporte de forma estática en GitHub Pages
+    # 3. GUARDAR ARTEFACTO (Agregado para descarga directa en la ejecución)
+    - name: Guardar reporte de Allure como artefacto
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: allure-report-artifact
+        path: allure-history/
+
+    # 4. Publica el reporte de forma estática en GitHub Pages
     - name: Desplegar reporte a GitHub Pages
       uses: peaceiris/actions-gh-pages@v4
       if: always()
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: allure-history
+        publish_branch: gh-pages # Fuerza la publicación en la rama de páginas estáticas
