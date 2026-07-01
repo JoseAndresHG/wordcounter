@@ -1,36 +1,36 @@
 # language: es
 Característica: Word Counter
-
+  
   Escenario: Validar el conteo de palabras
     Dado que el usuario abre la pagina de WordCounter
-    Cuando el usuario ingresa el texto "Jose"
-    Entonces la aplicacion debe mostrar 1 palabras
-
+    Cuando el usuario ingresa el texto "Hola Jose"
+    Entonces la aplicacion debe mostrar 2 palabras
 
   Escenario: Validar el conteo de caracteres
     Dado que el usuario abre la pagina de WordCounter
-    Cuando el usuario ingresa el texto "Hola"
-    Entonces la aplicacion debe mostrar 4 caracteres
+    Cuando el usuario ingresa el texto "Buenos dias"
+    Entonces la aplicacion debe mostrar 11 caracteres
 
-
-  Escenario: Validar las tres palabras más repetidas
-    Dado que el usuario abre la página de WordCounter
-    Cuando el usuario ingresa el siguiente texto
+  
+  Escenario: Validar la palabra más repetida
+    Dado que el usuario abre la pagina de WordCounter
+    Cuando el usuario ingresa el siguiente texto 
       """
-      rojo rojo rojo
-      azul azul
-      verde
+      hola hola hola 
+      mundo mundo 
+      selenium
       """
-    Entonces la sección "Densidad de palabras clave" debe mostrar
-      | palabra | repeticiones |
-      | rojo    | 3            |
-      | azul    | 2            |
-      | verde   | 1            |
-
-
+    Entonces se valida que la palabra más se repite sea "hola"
+    
+  
   Escenario: Validar un texto vacío
-    Dado que el usuario abre la página de WordCounter
-    Cuando el usuario no ingresa ningún texto
-    Entonces el número de palabras debe ser 0
-    Y el número de caracteres debe ser 0
-    Y la sección "Densidad de palabras clave" no debe mostrar resultados
+    Dado que el usuario abre la pagina de WordCounter
+    Cuando el usuario ingresa un texto vacío
+    Entonces la aplicacion debe mostrar 0 caracteres
+
+  
+  Escenario: Validar conteo de caracteres con palabra
+    Dado que el usuario abre la pagina de WordCounter
+    Cuando el usuario ingresa el texto "Hol@ Jose"
+    Entonces la aplicacion debe mostrar 10 caracteres
+   

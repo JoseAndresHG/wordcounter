@@ -1,6 +1,11 @@
+from multiprocessing import context
+from selenium.webdriver.support import expected_conditions as EC
 from behave import given, then, when
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
+import time
+from locators.word_counter_locators import WordCounterLocators
 
-@given("que el usuario abre la página de WordCounter")
 @given("que el usuario abre la pagina de WordCounter")
 def open_word_counter_page(context):
     context.word_counter_page.open()
@@ -16,8 +21,8 @@ def enter_multiline_text(context):
     context.word_counter_page.enter_text(context.text)
 
 
-@when("el usuario no ingresa ningún texto")
-def enter_empty_text(context):
+@when("el usuario ingresa un texto vacío")
+def step_impl(context):
     context.word_counter_page.enter_text("")
 
 
@@ -40,20 +45,7 @@ def validate_character_count(context, expected_count):
 def validate_character_number(context, expected_count):
     context.word_counter_page.wait_for_character_count(expected_count)
 
-
-@then('la sección "{section_name}" debe mostrar')
-def validate_keyword_density(context, section_name):
-    expected_density = [
-        {
-            "palabra": row["palabra"],
-            "repeticiones": int(row["repeticiones"]),
-        }
-        for row in context.table
-    ]
-
-    context.word_counter_page.wait_for_keyword_density(expected_density)
-
-
-@then('la sección "{section_name}" no debe mostrar resultados')
-def validate_empty_keyword_density(context, section_name):
-    context.word_counter_page.wait_for_empty_keyword_density()
+    
+@then('se valida que la palabra más se repite sea "{palabra_esperada}"')
+def step_validate_most_repeated_word(context, palabra_esperada):
+    context.word_counter_page.validate_most_repeated_word(palabra_esperada)

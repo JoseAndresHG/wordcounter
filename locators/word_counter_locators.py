@@ -8,3 +8,4 @@ class WordCounterLocators:
     KEYWORD_DENSITY_WORDS = (By.CSS_SELECTOR, "#kwd-accordion-data .list-group-item .word")
     KEYWORD_DENSITY_WORD = (By.CSS_SELECTOR, ".word")
     KEYWORD_DENSITY_REPETITIONS = (By.CSS_SELECTOR, ".badge")
+    MOST_REPEATED_WORD = (By.XPATH, "//span[@class='word']")

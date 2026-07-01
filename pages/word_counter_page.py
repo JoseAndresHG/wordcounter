@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
-
+import time
 from locators.word_counter_locators import WordCounterLocators
 from utils.driver_factory import DriverFactory
 
@@ -28,6 +28,7 @@ class WordCounterPage:
         editor.send_keys(Keys.CONTROL, "a")
         editor.send_keys(Keys.BACKSPACE)
         editor.send_keys(text)
+        editor.send_keys(Keys.SHIFT)
 
     def get_word_count(self):
         counter = self.wait.until(EC.visibility_of_element_located(WordCounterLocators.WORD_COUNT))
@@ -57,6 +58,7 @@ class WordCounterPage:
             raise ValueError(f"Character count value was not found in text: '{counter_text}'")
 
         return int(match.group())
+    
 
     def wait_for_character_count(self, expected_count):
         try:
@@ -116,7 +118,26 @@ class WordCounterPage:
             raise AssertionError(
                 f"Expected no keyword density results, but found {actual_density}."
             ) from exc
+        
 
     def _wait_until_loaded(self):
         self.wait.until(EC.visibility_of_element_located(WordCounterLocators.EDITOR))
         self.wait.until(EC.visibility_of_element_located(WordCounterLocators.WORD_COUNT))
+
+
+    def validate_most_repeated_word(self, expected_word):
+        self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);"
+        )
+        time.sleep(0.5)
+
+        elemento_palabra = self.wait.until(EC.visibility_of_element_located(WordCounterLocators.MOST_REPEATED_WORD
+            )
+        )
+        WebDriverWait(self.driver, 5).until(lambda driver: elemento_palabra.text.strip() != ""
+        )
+        palabra_obtenida = elemento_palabra.text.strip().lower()
+
+        assert palabra_obtenida == expected_word.lower(), (
+            f"Se esperaba '{expected_word}' "
+            f"pero se obtuvo '{palabra_obtenida}'"
+        )
