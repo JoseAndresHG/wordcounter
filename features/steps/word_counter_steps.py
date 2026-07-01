@@ -1,10 +1,6 @@
 from multiprocessing import context
-from selenium.webdriver.support import expected_conditions as EC
+
 from behave import given, then, when
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.common.by import By
-import time
-from locators.word_counter_locators import WordCounterLocators
 
 
 @given("que el usuario abre la pagina de WordCounter")
@@ -27,11 +23,6 @@ def step_impl(context):
     context.word_counter_page.enter_text("")
 
 
-@then("la aplicacion debe mostrar {expected_count:d} palabras")
-def validate_word_count(context, expected_count):
-    context.word_counter_page.wait_for_word_count(expected_count)
-
-
 @then("el número de palabras debe ser {expected_count:d}")
 def validate_word_number(context, expected_count):
     context.word_counter_page.wait_for_word_count(expected_count)
@@ -46,8 +37,16 @@ def validate_character_count(context, expected_count):
 def validate_character_number(context, expected_count):
     context.word_counter_page.wait_for_character_count(expected_count)
 
-    
-@then('se valida que la palabra más se repite sea "{palabra_esperada}"')
-def step_validate_most_repeated_word(context, palabra_esperada):
-    context.word_counter_page.validate_most_repeated_word(palabra_esperada)
+
+@then('la palabra más repetida debe ser "{expected_word}"')
+def validate_most_repeated_word(context, expected_word):
+    context.word_counter_page.validate_most_repeated_word(expected_word)     
   
+
+@then("las palabras más repetidas deben ser")
+def validate_words_by_frequency(context):
+    expected = [
+        (row["palabra"], int(row["repeticiones"]))
+        for row in context.table
+    ]
+    context.word_counter_page.validate_words_by_frequency(expected)

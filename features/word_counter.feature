@@ -1,11 +1,10 @@
 # language: es
 Característica: Word Counter
   
-  
   Escenario: Validar el conteo de palabras
     Dado que el usuario abre la pagina de WordCounter
     Cuando el usuario ingresa el texto "Hola Jose Andres"
-    Entonces la aplicacion debe mostrar 3 palabras
+    Entonces el número de palabras debe ser 3
 
   Escenario: Validar el conteo de caracteres
     Dado que el usuario abre la pagina de WordCounter
@@ -21,7 +20,7 @@ Característica: Word Counter
       mundo mundo 
       selenium
       """
-    Entonces se valida que la palabra más se repite sea "hola"
+    Entonces la palabra más repetida debe ser "hola"
     
   
   Escenario: Validar un texto vacío
@@ -44,6 +43,22 @@ Característica: Word Counter
       
       selenium
       """
-    Entonces la aplicacion debe mostrar 3 palabras
+    Entonces el número de palabras debe ser 3
     Y la aplicacion debe mostrar 35 caracteres
+
+  
+  
+  Escenario: Validar las palabras más repetidas
+    Dado que el usuario abre la pagina de WordCounter
+    Cuando el usuario ingresa el siguiente texto
+      """
+      lumu lumu lumu lumu lumu ilumina ilumina ataques y adversarios
+      lumu ilumina todos los ataques y adversarios
+      """
+    Entonces las palabras más repetidas deben ser
+      | palabra      | repeticiones |
+      | lumu         | 5            |
+      | ilumina      | 3            |
+      | ataques      | 2            |
+
    

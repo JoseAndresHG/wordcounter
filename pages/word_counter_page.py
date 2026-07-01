@@ -1,3 +1,4 @@
+from pydoc import text
 import re
 
 from selenium.common.exceptions import TimeoutException
@@ -21,15 +22,19 @@ class WordCounterPage:
     def open(self):
         self.driver.get(self.URL)
         self._wait_until_loaded()
+    
 
     def enter_text(self, text):
-        editor = self.wait.until(EC.element_to_be_clickable(WordCounterLocators.EDITOR))
-        editor.click()
-        editor.send_keys(Keys.CONTROL, "a")
-        editor.send_keys(Keys.BACKSPACE)
-        editor.send_keys(text)
-        editor.send_keys(Keys.ENTER)
-        editor.send_keys(Keys.SHIFT)
+            editor = self.wait.until(EC.element_to_be_clickable(WordCounterLocators.EDITOR
+        )
+    )
+            editor.click()
+            editor.send_keys(Keys.CONTROL, "a")
+            editor.send_keys(Keys.BACKSPACE)
+            editor.send_keys(text)
+
+            self.current_text = text
+    
 
     def get_word_count(self):
         counter = self.wait.until(EC.visibility_of_element_located(WordCounterLocators.WORD_COUNT))
@@ -46,8 +51,7 @@ class WordCounterPage:
             self.wait.until(lambda _: self.get_word_count() == expected_count)
         except TimeoutException as exc:
             actual_count = self.get_word_count()
-            raise AssertionError(
-                f"Expected {expected_count} words, but found {actual_count}."
+            raise AssertionError(f"Expected {expected_count} words, but found {actual_count}."
             ) from exc
 
     def get_character_count(self):
@@ -69,6 +73,7 @@ class WordCounterPage:
             raise AssertionError(
                 f"Expected {expected_count} characters, but found {actual_count}."
             ) from exc
+        
 
     def get_keyword_density(self):
         items = self.wait.until(
@@ -126,19 +131,68 @@ class WordCounterPage:
         self.wait.until(EC.visibility_of_element_located(WordCounterLocators.WORD_COUNT))
 
 
+
+    def get_most_repeated_word(self):
+        self.driver.execute_script("arguments[0].scrollIntoView({block:'center'});",
+            self.wait.until(EC.visibility_of_element_located(WordCounterLocators.MOST_REPEATED_WORD
+                                   )
+                               ))
+        element = self.wait.until(
+        EC.visibility_of_element_located(
+            WordCounterLocators.MOST_REPEATED_WORD
+        )
+    )
+        self.wait.until(lambda _: element.text.strip() != "")
+        return element.text.strip()
+    
+    
     def validate_most_repeated_word(self, expected_word):
-        self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);"
-        )
-        time.sleep(0.5)
+        actual_word = self.get_most_repeated_word()
 
-        elemento_palabra = self.wait.until(EC.visibility_of_element_located(WordCounterLocators.MOST_REPEATED_WORD
-            )
-        )
-        WebDriverWait(self.driver, 5).until(lambda driver: elemento_palabra.text.strip() != ""
-        )
-        palabra_obtenida = elemento_palabra.text.strip().lower()
+        assert actual_word.lower() == expected_word.lower(), (
+        f"Se esperaba '{expected_word}', "
+        f"pero se obtuvo '{actual_word}'."
+    )
 
-        assert palabra_obtenida == expected_word.lower(), (
-            f"Se esperaba '{expected_word}' "
-            f"pero se obtuvo '{palabra_obtenida}'"
-        )
+
+    def calculate_word_frequency(self):
+        text = self.current_text.lower()
+
+        words = re.findall(r"\b[\w]+\b", text)
+
+        frequency = {}
+
+        for word in words:
+         frequency[word] = frequency.get(word, 0) + 1
+
+        return frequency   
+
+
+    def bubble_sort_frequency(self, frequency):
+
+        items = list(frequency.items())
+
+        n = len(items)
+
+        for i in range(n):
+
+            for j in range(0, n - i - 1):
+
+                if items[j][1] < items[j + 1][1]:
+
+                    items[j], items[j + 1] = items[j + 1], items[j]
+        return items
+    
+    def get_words_by_frequency(self):
+        frequency = self.calculate_word_frequency()
+        return self.bubble_sort_frequency(frequency)
+    
+    def validate_words_by_frequency(self, expected):
+        actual = self.get_words_by_frequency()
+
+        actual = actual[:len(expected)]
+
+        assert actual == expected, (
+         f"\nSe esperaba:\n{expected}\n\n"
+         f"Pero se obtuvo:\n{actual}"
+    )
