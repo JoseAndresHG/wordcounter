@@ -1,0 +1,8 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"","8553","Validar el conteo de palabras","","2026-07-01","passed","2026-07-01","","","",""
+"","1895","Validar las palabras más repetidas","","2026-07-01","failed","2026-07-01","","","",""
+"","2306","Validar el conteo de caracteres","","2026-07-01","passed","2026-07-01","","","",""
+"","12739","Validación de conteo con espacios múltiples y saltos de línea","","2026-07-01","failed","2026-07-01","","","",""
+"","2082","Validar un texto vacío","","2026-07-01","passed","2026-07-01","","","",""
+"","3537","Validar la palabra más repetida","","2026-07-01","passed","2026-07-01","","","",""
+"","12098","Validar conteo de caracteres con palabra","","2026-07-01","failed","2026-07-01","","","",""
