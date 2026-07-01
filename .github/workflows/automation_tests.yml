@@ -1,0 +1,56 @@
+name: QA Automation Suite
+
+on:
+  push:
+    branches: [ "main", "feature/wordcounter-tests",]
+  pull_request:
+    branches: [ "main", "feature/wordcounter-tests" ]
+  workflow_dispatch: 
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  run-behave-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Descargar repositorio
+      uses: actions/checkout@v4
+
+    - name: Configurar entorno de Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+
+    - name: Instalar dependencias del proyecto
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    # 1. Ejecutamos behave guardando los resultados crudos en formato Allure
+    - name: Ejecutar pruebas E2E con Behave
+      env:
+        HEADLESS: "true"
+      run: |
+        behave -f allure_behave.formatter:AllureFormatter -o allure-results
+
+    # 2. Transforma esos archivos crudos en un reporte histórico estructurado
+    - name: Generar Reporte de Allure
+      uses: simple-elf/allure-report-action@master
+      if: always()
+      with:
+        allure_results: allure-results
+        allure_history: allure-history
+        keep_reports: 20
+
+    # 3. Publica el reporte de forma estática en GitHub Pages
+    - name: Desplegar reporte a GitHub Pages
+      uses: peaceiris/actions-gh-pages@v4
+      if: always()
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: allure-history
